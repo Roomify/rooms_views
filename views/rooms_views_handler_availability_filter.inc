@@ -98,6 +98,11 @@ class rooms_views_handler_availability_filter extends views_php_handler_filter {
       $ids = array();
       $units = $agent->checkAvailability();
 
+      if (!is_array($units)) {
+        $this->view->result = array();
+        return;
+      }
+
       foreach ($units as $units_per_type) {
         foreach ($units_per_type as $units) {
           foreach ($units as $id => $unit) {
