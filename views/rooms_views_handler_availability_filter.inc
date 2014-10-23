@@ -26,8 +26,12 @@ class rooms_views_handler_availability_filter extends views_php_handler_filter {
     $options = parent::option_definition();
     $start_date = new Datetime();
     $end_date = new Datetime('+1 week');
-    $options['rooms_start_date'] = array('default' => $start_date->format('Y-m-d'));
-    $options['rooms_end_date'] = array('default' => $end_date->format('Y-m-d'));
+    $options['value'] = array(
+      'default' => array(
+        'rooms_start_date' => $start_date,
+        'rooms_end_date' => $end_date,
+      )
+    );
     $options['php_filter'] = array('default' => 1);
     return $options;
   }
@@ -55,8 +59,16 @@ class rooms_views_handler_availability_filter extends views_php_handler_filter {
 
     $form['value'] += rooms_date_range_fields();
 
-    $form['value']['rooms_start_date']['#default_value'] = $this->options['rooms_start_date'];
-    $form['value']['rooms_end_date']['#default_value'] = $this->options['rooms_end_date'];
+    $form['value']['rooms_start_date']['#default_value'] = $this->value['rooms_start_date']->format('Y-m-d');
+    $form['value']['rooms_end_date']['#default_value'] = $this->value['rooms_end_date']->format('Y-m-d');
+  }
+
+  /**
+   * Implements views_object#value_validate().
+   */
+  function value_validate($form, &$form_state) {
+    form_set_value($form['value']['rooms_start_date'], new DateTime($form_state['values']['options']['value']['rooms_start_date']), $form_state);
+    form_set_value($form['value']['rooms_end_date'], new DateTime($form_state['values']['options']['value']['rooms_end_date']), $form_state);
   }
 
   /**
