@@ -5,6 +5,7 @@ core = 7.x
 package = Rooms
 
 dependencies[] = rooms_booking_manager
+dependencies[] = views_php
 
 files[] = views/rooms_views.views.inc
 files[] = views/rooms_views_handler_availability_filter.inc
