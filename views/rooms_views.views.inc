@@ -9,7 +9,7 @@
 /**
  * Implements hook_views_data().
  */
-function rooms_views_views_data_alter(&$data) {
+function rooms_views_views_data() {
   $data['rooms_units']['availability'] = array(
     'title' => t('Availability'),
     'filter' => array(
@@ -20,7 +20,7 @@ function rooms_views_views_data_alter(&$data) {
   );
 
   // Price calculations only available when calculating price per night.
-  if (variable_get('rooms_price_calculation', ROOMS_PER_NIGHT)){
+  if (variable_get('rooms_price_calculation', ROOMS_PER_NIGHT) == ROOMS_PER_NIGHT) {
     $data['rooms_units']['booking'] = array(
       'title' => t('Booking form'),
       'field' => array(
@@ -30,4 +30,6 @@ function rooms_views_views_data_alter(&$data) {
       ),
     );
   }
+
+  return $data;
 }

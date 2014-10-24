@@ -2,7 +2,7 @@
 
 /**
  * @file
- *   Hooks and API functions for rooms_views module.
+ * Hooks and API functions for rooms_views module.
  */
 
 /**
@@ -22,9 +22,9 @@ function rooms_views_views_api() {
  *   Booking start date.
  * @param Datetime $end_date
  *   Booking end date.
- * @param $unit_id
+ * @param int $unit_id
  *   The Bookable unit ID to book.
- * @param $button_text
+ * @param string $button_text
  *   Text to display on booking button.
  */
 function rooms_views_booking_button_form($form, &$form_state, $start_date, $end_date, $unit_id, $button_text) {
@@ -128,7 +128,7 @@ function rooms_views_booking_button_form($form, &$form_state, $start_date, $end_
   $form['new_price'] = array(
     '#prefix' => '<div class="rooms-search-result__new-price" id="unit_' . $unit_id . '_price">',
     '#markup' => '<label>' . t('Cost') . ':</label> <span class="rooms-search-result__new-price-amount">' .
-      t('@currency_symbol @amount', array( // TODO: replace with a proper currency formatter
+    t('@currency_symbol @amount', array(
         '@currency_symbol' => $currency_symbol,
         '@amount' => $price['full_price'],
       )) . '</span>',
