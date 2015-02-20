@@ -58,17 +58,20 @@ class rooms_views_handler_availability_filter extends views_php_handler_filter {
     );
 
     $form['value'] += rooms_date_range_fields();
-
-    $form['value']['rooms_start_date']['#default_value'] = $this->value['rooms_start_date']->format('Y-m-d');
-    $form['value']['rooms_end_date']['#default_value'] = $this->value['rooms_end_date']->format('Y-m-d');
+    $form['value']['rooms_start_date']['#required'] = FALSE;
+    $form['value']['rooms_end_date']['#required'] = FALSE;
   }
 
   /**
    * Implements views_object#value_validate().
    */
   function value_validate($form, &$form_state) {
-    form_set_value($form['value']['rooms_start_date'], new DateTime($form_state['values']['options']['value']['rooms_start_date']), $form_state);
-    form_set_value($form['value']['rooms_end_date'], new DateTime($form_state['values']['options']['value']['rooms_end_date']), $form_state);
+    if (!empty($form_state['values']['options']['value']['rooms_start_date'])) {
+      form_set_value($form['value']['rooms_start_date'], new DateTime($form_state['values']['options']['value']['rooms_start_date']), $form_state);
+    }
+    if (!empty($form_state['values']['options']['value']['rooms_end_date'])) {
+      form_set_value($form['value']['rooms_end_date'], new DateTime($form_state['values']['options']['value']['rooms_end_date']), $form_state);
+    }
   }
 
   /**
@@ -91,6 +94,9 @@ class rooms_views_handler_availability_filter extends views_php_handler_filter {
    * @see views_php_views_post_execute()
    */
   function php_post_execute() {
+    if (empty($this->value['rooms_start_date']) || empty($this->value['rooms_end_date'])) {
+      return;
+    }
     // Evaluate the Bookable units availability.
     if (!empty($this->options['php_filter'])) {
       $agent = new AvailabilityAgent($this->value['rooms_start_date'], $this->value['rooms_end_date']);
