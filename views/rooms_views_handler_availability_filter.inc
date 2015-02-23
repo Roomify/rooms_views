@@ -60,6 +60,13 @@ class rooms_views_handler_availability_filter extends views_php_handler_filter {
     $form['value'] += rooms_date_range_fields();
     $form['value']['rooms_start_date']['#required'] = FALSE;
     $form['value']['rooms_end_date']['#required'] = FALSE;
+
+    if (!empty($this->value['rooms_start_date'])) {
+    $form['value']['rooms_start_date']['#default_value'] = $this->value['rooms_start_date']->format('Y-m-d');
+    }
+    if (!empty($this->value['rooms_end_date'])) {
+    $form['value']['rooms_end_date']['#default_value'] = $this->value['rooms_end_date']->format('Y-m-d');
+    }
   }
 
   /**
