@@ -30,6 +30,7 @@ class rooms_views_handler_availability_filter extends views_php_handler_filter {
       'default' => array(
         'rooms_start_date' => $start_date,
         'rooms_end_date' => $end_date,
+        'group_size' => 2,
       )
     );
     $options['php_filter'] = array('default' => 1);
@@ -61,6 +62,13 @@ class rooms_views_handler_availability_filter extends views_php_handler_filter {
 
     $form['value']['rooms_start_date']['#default_value'] = $this->value['rooms_start_date']->format('Y-m-d');
     $form['value']['rooms_end_date']['#default_value'] = $this->value['rooms_end_date']->format('Y-m-d');
+    $form['value']['group_size'] = array(
+      '#type' => 'select',
+      '#title' => t('Guests'),
+      '#options' => rooms_assoc_range(1, 10),
+      '#default_value' => $this->value['group_size'],
+      '#description' => t('The total number of people staying in this unit (including adults and children).'),
+    );
   }
 
   /**
@@ -80,6 +88,7 @@ class rooms_views_handler_availability_filter extends views_php_handler_filter {
     if ($end_date > $start_date) {
       $this->value['rooms_start_date'] = $start_date;
       $this->value['rooms_end_date'] = $end_date;
+      $this->value['group_size'] = $input['group_size'];
       return TRUE;
     }
     return FALSE;
@@ -93,7 +102,7 @@ class rooms_views_handler_availability_filter extends views_php_handler_filter {
   function php_post_execute() {
     // Evaluate the Bookable units availability.
     if (!empty($this->options['php_filter'])) {
-      $agent = new AvailabilityAgent($this->value['rooms_start_date'], $this->value['rooms_end_date']);
+      $agent = new AvailabilityAgent($this->value['rooms_start_date'], $this->value['rooms_end_date'], array(array('adults' => $this->value['group_size'])));
 
       $ids = array();
       $units = $agent->checkAvailability();
