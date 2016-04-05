@@ -28,6 +28,11 @@ function rooms_views_views_api() {
  *   Text to display on booking button.
  */
 function rooms_views_booking_button_form($form, &$form_state, $start_date, $end_date, $unit_id, $button_text) {
+  // Set unit ID from form state.
+  if (isset($form_state['input']['unit_id'])) {
+    $unit_id = $form_state['input']['unit_id'];
+  }
+
   $currency_setting = commerce_currency_load(commerce_default_currency());
   $currency_symbol = $currency_setting['symbol'];
   $temp_end_date = clone($end_date);
