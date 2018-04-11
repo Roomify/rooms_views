@@ -83,6 +83,12 @@ function rooms_views_booking_button_form($form, &$form_state, $start_date, $end_
       ),
     );
 
+    if ($option['type'] == ROOMS_OPTION_MANDATORY) {
+      $form['options'][$option_name]['#default_value'] = '1';
+      $form['options'][$option_name]['#disabled'] = TRUE;
+    }
+
+
     // Show quantity field selector if in option quantity is set.
     if (is_numeric($option['quantity'])) {
       if (isset($form_state['values']['options'][$option_name]) &&
