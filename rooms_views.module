@@ -131,6 +131,15 @@ function rooms_views_booking_button_form($form, &$form_state, $start_date, $end_
     }
   }
 
+  // Give other modules a chance to change the price modifiers.
+  $booking_info = array(
+    'start_date' => clone($start_date),
+    'end_date' => clone($end_date),
+    'unit' => $unit,
+  );
+
+  drupal_alter('rooms_price_modifier', $price_modifiers, $booking_info);
+
   // Apply price modifiers and replace unit price.
   $price_calendar = new UnitPricingCalendar($unit_id, $price_modifiers);
 
