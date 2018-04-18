@@ -114,7 +114,20 @@ function rooms_views_booking_button_form($form, &$form_state, $start_date, $end_
       }
     }
 
-    if (isset($form_state['values']['options'][$option_name])) {
+    if ($option['type'] == ROOMS_OPTION_MANDATORY) {
+      $quantity = 1;
+      if (isset($form_state['values']['options'][$option_name . ':quantity']) && $option['operation'] != ROOMS_REPLACE) {
+        $quantity = $form_state['values']['options'][$option_name . ':quantity'] + 1;
+      }
+
+      $price_modifiers[$option_name] = array(
+        '#type' => ROOMS_DYNAMIC_MODIFIER,
+        '#op_type' => $option['operation'],
+        '#amount' => $option['value'],
+        '#quantity' => $quantity,
+      );
+    }
+    elseif (isset($form_state['values']['options'][$option_name])) {
       $quantity = 1;
       if (isset($form_state['values']['options'][$option_name . ':quantity']) && $option['operation'] != ROOMS_REPLACE) {
         $quantity = $form_state['values']['options'][$option_name . ':quantity'] + 1;
