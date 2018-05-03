@@ -73,7 +73,7 @@ function rooms_views_booking_button_form($form, &$form_state, $start_date, $end_
   $unit = rooms_unit_load($unit_id);
 
   foreach (rooms_unit_get_unit_options($unit) as $option) {
-    $option_name = strtolower(str_replace(array(':', ' '), '_', $option['name']));
+    $option_name = rooms_options_machine_name($option['name']);
     $form['options'][$option_name] = array(
       '#type' => 'checkbox',
       '#title' => $option['name'],
